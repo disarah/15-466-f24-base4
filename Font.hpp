@@ -1,4 +1,4 @@
-// Code by Qiru Hu
+// Code modified from Qiru Hu's Font.hpp
 #pragma once
 
 #include <ft2build.h>

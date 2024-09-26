@@ -1,3 +1,5 @@
+// Taken from Class Discord
+// Jim McCann
 #pragma once
 
 #include "GL.hpp"
