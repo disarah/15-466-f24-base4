@@ -158,12 +158,15 @@ bool PlayMode::handle_event(SDL_Event const &evt, glm::uvec2 const &window_size)
 	} else if (evt.type == SDL_KEYUP) {
 		if (evt.key.keysym.sym == SDLK_RETURN) {
 			enter.pressed = false;
+			enterb = false;
 			return true;
 		} else if (evt.key.keysym.sym == SDLK_RIGHT) {
 			right.pressed = false;
+			rightb = false;
 			return true;
 		} else if (evt.key.keysym.sym == SDLK_LEFT) {
 			left.pressed = false;
+			leftb = false;
 			return true;
 		}
 	}
@@ -186,17 +189,19 @@ void PlayMode::update(float elapsed) {
 	//move camera:
 	{
 		//combine inputs into a move:
-		if(timer == 0){
-			timer = 0.1f;
-			if (enter.pressed && !right.pressed && !left.pressed){
-				texts[0].text = script->get_next_line((uint32_t)std::round((selector->position.x + 0.4f)/0.7f));
-				Roboto->gen_texture(tex_example.tex, texts);
-			}
-			if (!right.pressed && left.pressed) selector->position.x = std::clamp(selector->position.x - 0.7f, -0.4f, 1.f);
-			if (right.pressed && !left.pressed) selector->position.x = std::clamp(selector->position.x + 0.7f, -0.4f, 1.f);
+		if (enter.pressed && !right.pressed && !left.pressed && !enterb){
+			enterb = true;
+			texts[0].text = script->get_next_line((uint32_t)std::round((selector->position.x + 0.4f)/0.7f));
+			Roboto->gen_texture(tex_example.tex, texts);
 		}
-		
-		timer = std::max(timer - elapsed, 0.f);
+		if (!right.pressed && left.pressed && !leftb){
+			leftb = true;
+			selector->position.x = std::clamp(selector->position.x - 0.7f, -0.4f, 1.f);
+		}
+		if (right.pressed && !left.pressed && !rightb){
+			rightb = true;
+			selector->position.x = std::clamp(selector->position.x + 0.7f, -0.4f, 1.f);
+		}
 	}
 
 	{ //update listener to camera position:

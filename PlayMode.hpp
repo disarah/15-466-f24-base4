@@ -41,7 +41,11 @@ struct PlayMode : Mode {
 	struct Button {
 		uint8_t downs = 0;
 		uint8_t pressed = 0;
-	} enter, left, right, down;
+	} enter, left, right;
+
+	bool enterb = false;
+	bool leftb = false;
+	bool rightb = false;
 
 	//local copy of the game scene (so code can change it during gameplay):
 	Scene scene;
@@ -50,8 +54,6 @@ struct PlayMode : Mode {
 	Scene::Transform *selector = nullptr;
 	glm::quat raccoon_rotation;
 	float wobble = 0.0f;
-
-	float timer = 0.1f;
 
 	unsigned int const script_line_length = 50;
 	unsigned int const script_line_height = 50;
