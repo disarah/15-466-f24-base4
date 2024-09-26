@@ -60,9 +60,9 @@ PlayMode::PlayMode() : scene(*hexapod_scene) {
 		music_loop = Sound::loop_3D(*game4_music_sample, 1.0f, get_raccoon_position(), 10.0f);
 	}
 
-	Text text1(newline + "You are a Raccoon                                                                                Press enter to Start",
-				script_line_height,
-				script_line_length
+	Text text1(newline + "You are a Raccoon                                                                                     Press enter to Start",
+				script_line_length,
+				script_line_height
 				);
 
 	texts.push_back(text1);
@@ -93,19 +93,19 @@ PlayMode::PlayMode() : scene(*hexapod_scene) {
 		std::vector< PosTexVertex > verts;
 
 		verts.emplace_back(PosTexVertex{
-			.Position = glm::vec3(0.0f, 0.0f, 0.0f),
+			.Position = glm::vec3(-0.5f, -1.0f, 0.0f),
 			.TexCoord = glm::vec2(0.0f, 0.0f),
 		});
 		verts.emplace_back(PosTexVertex{
-			.Position = glm::vec3(0.0f, 1.0f, 0.0f),
+			.Position = glm::vec3(-0.5f, 0.5f, 0.0f),
 			.TexCoord = glm::vec2(0.0f, 1.0f),
 		});
 		verts.emplace_back(PosTexVertex{
-			.Position = glm::vec3(1.0f, 0.0f, 0.0f),
+			.Position = glm::vec3(1.5f, -1.0f, 0.0f),
 			.TexCoord = glm::vec2(1.0f, 0.0f),
 		});
 		verts.emplace_back(PosTexVertex{
-			.Position = glm::vec3(1.0f, 1.0f, 0.0f),
+			.Position = glm::vec3(1.5f, 0.5f, 0.0f),
 			.TexCoord = glm::vec2(1.0f, 1.0f),
 		});
 
@@ -121,7 +121,7 @@ PlayMode::PlayMode() : scene(*hexapod_scene) {
 			0.8f, 0.0f, 0.0f, 0.0f,
 			0.0f, 1.0f, 0.0f, 0.0f,
 			0.0f, 0.0f, 1.0f, 0.0f,
-			-0.25f, -0.5f, 0.0f, 1.0f
+			0.05f, 0.0f, 0.0f, 1.0f
 		);
 	}
 }
@@ -238,7 +238,7 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 		glUseProgram(lit_color_texture_program->program);
 		glUniform1i(lit_color_texture_program->LIGHT_TYPE_int, 1);
 		glUniform3fv(lit_color_texture_program->LIGHT_DIRECTION_vec3, 1, glm::value_ptr(glm::vec3(0.0f, 0.0f,-1.0f)));
-		glUniform3fv(lit_color_texture_program->LIGHT_ENERGY_vec3, 1, glm::value_ptr(glm::vec3(1.0f, 1.0f, 0.95f)));
+		glUniform3fv(lit_color_texture_program->LIGHT_ENERGY_vec3, 1, glm::value_ptr(glm::vec3(1.0f, 0.8f, 0.6f)));
 		glUseProgram(0);
 
 		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
