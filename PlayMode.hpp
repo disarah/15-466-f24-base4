@@ -10,6 +10,7 @@
 #include <vector>
 #include <deque>
 
+// ------- from Jim's notes -------
 struct PosTexVertex {
     glm::vec3 Position;
     glm::vec2 TexCoord;
@@ -23,6 +24,7 @@ struct {
     GLuint count = 0; //number of vertices in buffer
     glm::mat4 CLIP_FROM_LOCAL = glm::mat4(1.0f); //transform to use when drawing
 } tex_example;
+// -------------------------------
 
 struct PlayMode : Mode {
 	PlayMode();

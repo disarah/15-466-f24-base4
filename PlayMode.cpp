@@ -48,7 +48,7 @@ Load< Sound::Sample > game4_music_sample(LoadTagDefault, []() -> Sound::Sample c
 });
 
 PlayMode::PlayMode() : scene(*hexapod_scene) {
-	//get pointers to leg for convenience:
+	//get pointers for convenience:
 	{
 		for (auto &transform : scene.transforms) {
 			if (transform.name == "Raccoon") raccoon = &transform;
@@ -126,6 +126,7 @@ PlayMode::PlayMode() : scene(*hexapod_scene) {
 		GL_ERRORS();
 
 		//identity transform (just drawing "on the screen"):
+		// slight scaling to make text smaller
 		tex_example.CLIP_FROM_LOCAL = glm::mat4(
 			0.8f, 0.0f, 0.0f, 0.0f,
 			0.0f, 1.0f, 0.0f, 0.0f,
@@ -171,7 +172,7 @@ bool PlayMode::handle_event(SDL_Event const &evt, glm::uvec2 const &window_size)
 }
 
 void PlayMode::update(float elapsed) {
-	// wobble leg
+	// wobble raccoon
 	{
 		//slowly rotates through [0,1):
 		wobble += elapsed / 10.0f;
