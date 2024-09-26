@@ -1,4 +1,4 @@
-// Code modified from Qiru Hu's Font.hpp
+// Code adapted from Qiru Hu's Font.hpp
 #pragma once
 
 #include <ft2build.h>
@@ -19,6 +19,22 @@ struct Text {
 
     int line_length;
     int line_height;
+
+    Text(std::string t, int ll, int lh)
+    {
+        text = t;
+        start_pos = glm::vec2();
+        line_length = ll;
+        line_height = lh;
+    }
+    
+    Text(std::string t, glm::vec2 sp, int ll, int lh)
+    {
+        text = t;
+        start_pos = sp;
+        line_length = ll;
+        line_height = lh;
+    }
 };
 
 struct Font {

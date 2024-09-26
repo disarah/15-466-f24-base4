@@ -1,6 +1,6 @@
-# (TODO: your game's title)
+# Rags to Raccoon
 
-Author: (TODO: your name)
+Author: Sarah Di (sarahdi)
 
 Design: (TODO: In two sentences or fewer, describe what is new and interesting about your game.)
 
@@ -14,6 +14,7 @@ Screen Shot:
 
 How To Play:
 
+You are a Raccoon that likes shiny things. 
 (TODO: describe the controls and (if needed) goals/strategy.)
 
 Sources: (TODO: list a source URL for any assets you did not create yourself. Make sure you have a license for the asset.)

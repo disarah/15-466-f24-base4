@@ -49,6 +49,14 @@ struct PlayMode : Mode {
 
 	glm::vec3 get_raccoon_position();
 
+	unsigned int const script_line_length = 100;
+	unsigned int const script_line_height = 50;
+	unsigned int const font_size = 72;
+	unsigned int const font_width = 1480;
+	unsigned int const font_height = 800;
+
+	std::string newline= "                                                                                ";
+
 	std::shared_ptr< Sound::PlayingSample > music_loop;
 
 	std::shared_ptr< Font > Roboto;

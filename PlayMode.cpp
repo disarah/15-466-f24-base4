@@ -60,15 +60,15 @@ PlayMode::PlayMode() : scene(*hexapod_scene) {
 		music_loop = Sound::loop_3D(*game4_music_sample, 1.0f, get_raccoon_position(), 10.0f);
 	}
 
-	Text text1;
-	text1.text = "wowwkekjlwkjflkjwlkf                                           sldkfjlskdjfs                                              sldkfjsl";
-    text1.start_pos = glm::vec2();
-	text1.line_length = 50;
-	text1.line_height = 80;
+	Text text1(newline + "You are a Raccoon                                                                                Press enter to Start",
+				script_line_height,
+				script_line_length
+				);
 
 	texts.push_back(text1);
 
-	Roboto = std::make_shared<Font> (data_path("Roboto/Roboto-Regular.ttf"), 72, 1000, 500);
+
+	Roboto = std::make_shared<Font> (data_path("Roboto/Roboto-Regular.ttf"), font_size, font_width, font_height);
 	Roboto->gen_texture(tex_example.tex, texts);
 
 	{ //set up vertex array and buffers:
@@ -118,10 +118,10 @@ PlayMode::PlayMode() : scene(*hexapod_scene) {
 
 		//identity transform (just drawing "on the screen"):
 		tex_example.CLIP_FROM_LOCAL = glm::mat4(
-			1.0f, 0.0f, 0.0f, 0.0f,
+			0.8f, 0.0f, 0.0f, 0.0f,
 			0.0f, 1.0f, 0.0f, 0.0f,
 			0.0f, 0.0f, 1.0f, 0.0f,
-			0.0f, 0.0f, 0.0f, 1.0f
+			-0.25f, -0.5f, 0.0f, 1.0f
 		);
 	}
 }
