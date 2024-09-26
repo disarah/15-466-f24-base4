@@ -4,7 +4,7 @@ Author: Sarah Di (sarahdi)
 
 Design: My game is about a raccoon spending a day in New York.
 
-Text Drawing: The text for this game is precomputed and rendered at runtime using code adapted from Qiru Hu's Font.cpp/hpp (with permission!). Using both the TextureProgram script by Jim McCann which we covered in class, I then render the texture in the blender scene as fixed to the screen.
+Text Drawing: The main files used for Text Drawing are Font.cpp/Font.hpp and TextureProgram.cpp/hpp. The text for this game is precomputed and rendered at runtime using code adapted from Qiru Hu's Font.cpp/hpp (with permission!). Using the TextureProgram.cpp/hpp by Jim McCann which was covered in class, I then render the texture into the blender scene.
 
 (TODO: how does the text drawing in this game work? What files or utilities are involved?)
 
