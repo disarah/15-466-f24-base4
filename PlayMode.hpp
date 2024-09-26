@@ -3,6 +3,7 @@
 #include "Scene.hpp"
 #include "Sound.hpp"
 #include "Font.hpp"
+#include "Script.hpp"
 
 #include <glm/glm.hpp>
 
@@ -38,16 +39,17 @@ struct PlayMode : Mode {
 	struct Button {
 		uint8_t downs = 0;
 		uint8_t pressed = 0;
-	} left, right, down, up;
+	} enter, left, right, down;
 
 	//local copy of the game scene (so code can change it during gameplay):
 	Scene scene;
 
 	Scene::Transform *raccoon = nullptr;
+	Scene::Transform *selector = nullptr;
 	glm::quat raccoon_rotation;
 	float wobble = 0.0f;
 
-	glm::vec3 get_raccoon_position();
+	float timer = 0.1f;
 
 	unsigned int const script_line_length = 50;
 	unsigned int const script_line_height = 50;
@@ -60,6 +62,7 @@ struct PlayMode : Mode {
 	std::shared_ptr< Sound::PlayingSample > music_loop;
 
 	std::shared_ptr< Font > Roboto;
+	std::shared_ptr< Script > script;
 
 	std::vector<Text> texts;
 	

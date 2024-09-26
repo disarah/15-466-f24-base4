@@ -11,6 +11,8 @@ struct Page {
     std::string option2;
     std::string option3;
 
+    std::string newline= "                                                                                ";
+
     Page(std::string t, std::string o1, std::string o2, std::string o3)
     {
       text = t;
@@ -19,7 +21,7 @@ struct Page {
       option3 = o3;
     }
 
-    virtual std::string get_text();
+    std::string get_text();
 };
 
 struct Script {
@@ -27,7 +29,9 @@ struct Script {
 	
     virtual ~Script();
 
-    unsigned int current_page;
+    unsigned int current_index;
+
+    std::vector< Page > pages;
 
     virtual std::string get_next_line(u_int32_t action);
 };

@@ -147,6 +147,7 @@ const common_names = [
 	maek.CPP('DrawLines.cpp'),
 	maek.CPP('ColorProgram.cpp'),
 	maek.CPP('Scene.cpp'),
+	maek.CPP('Script.cpp'),
 	maek.CPP('Mesh.cpp'),
 	maek.CPP('load_save_png.cpp'),
 	maek.CPP('gl_compile_program.cpp'),

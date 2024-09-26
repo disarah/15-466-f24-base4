@@ -46,8 +46,10 @@ PlayMode::PlayMode() : scene(*hexapod_scene) {
 	{
 		for (auto &transform : scene.transforms) {
 			if (transform.name == "Raccoon") raccoon = &transform;
+			else if (transform.name == "Selector") selector = &transform;
 		}
 		if (raccoon == nullptr) throw std::runtime_error("Raccoon not found.");
+		else if (selector == nullptr) throw std::runtime_error("Selector not found.");
 
 		raccoon_rotation = raccoon->rotation;
 
@@ -57,7 +59,7 @@ PlayMode::PlayMode() : scene(*hexapod_scene) {
 
 		//start music loop playing:
 		// (note: position will be over-ridden in update())
-		music_loop = Sound::loop_3D(*game4_music_sample, 1.0f, get_raccoon_position(), 10.0f);
+		music_loop = Sound::loop_3D(*game4_music_sample, 1.0f, raccoon->position, 10.0f);
 	}
 
 	Text text1(newline + "You are a Raccoon                                                                                     Press enter to Start",
@@ -67,6 +69,7 @@ PlayMode::PlayMode() : scene(*hexapod_scene) {
 
 	texts.push_back(text1);
 
+	script = std::make_shared<Script> ();
 
 	Roboto = std::make_shared<Font> (data_path("Roboto/Roboto-Regular.ttf"), font_size, font_width, font_height);
 	Roboto->gen_texture(tex_example.tex, texts);
@@ -132,38 +135,28 @@ PlayMode::~PlayMode() {
 bool PlayMode::handle_event(SDL_Event const &evt, glm::uvec2 const &window_size) {
 	// key movements
 	if (evt.type == SDL_KEYDOWN) {
-		if (evt.key.keysym.sym == SDLK_ESCAPE) {
-			SDL_SetRelativeMouseMode(SDL_FALSE);
+		if (evt.key.keysym.sym == SDLK_RETURN) {
+			enter.downs += 1;
+			enter.pressed = true;
 			return true;
-		} else if (evt.key.keysym.sym == SDLK_a) {
-			left.downs += 1;
-			left.pressed = true;
-			return true;
-		} else if (evt.key.keysym.sym == SDLK_d) {
+		} else if (evt.key.keysym.sym == SDLK_RIGHT) {
 			right.downs += 1;
 			right.pressed = true;
 			return true;
-		} else if (evt.key.keysym.sym == SDLK_w) {
-			up.downs += 1;
-			up.pressed = true;
-			return true;
-		} else if (evt.key.keysym.sym == SDLK_s) {
-			down.downs += 1;
-			down.pressed = true;
+		} else if (evt.key.keysym.sym == SDLK_LEFT) {
+			left.downs += 1;
+			left.pressed = true;
 			return true;
 		}
 	} else if (evt.type == SDL_KEYUP) {
-		if (evt.key.keysym.sym == SDLK_a) {
-			left.pressed = false;
+		if (evt.key.keysym.sym == SDLK_RETURN) {
+			enter.pressed = false;
 			return true;
-		} else if (evt.key.keysym.sym == SDLK_d) {
+		} else if (evt.key.keysym.sym == SDLK_RIGHT) {
 			right.pressed = false;
 			return true;
-		} else if (evt.key.keysym.sym == SDLK_w) {
-			up.pressed = false;
-			return true;
-		} else if (evt.key.keysym.sym == SDLK_s) {
-			down.pressed = false;
+		} else if (evt.key.keysym.sym == SDLK_LEFT) {
+			left.pressed = false;
 			return true;
 		}
 	}
@@ -182,29 +175,21 @@ void PlayMode::update(float elapsed) {
 			glm::radians(5.0f * std::sin(wobble * 2.0f * float(M_PI))),
 			glm::vec3(0.0f, 1.0f, 0.0f)
 		);
-
-		//move sound to follow leg tip position:
-		music_loop->set_position(get_raccoon_position(), 1.0f / 60.0f);
 	}
 	//move camera:
 	{
 		//combine inputs into a move:
-		constexpr float PlayerSpeed = 30.0f;
-		glm::vec2 move = glm::vec2(0.0f);
-		if (left.pressed && !right.pressed) move.x =-1.0f;
-		if (!left.pressed && right.pressed) move.x = 1.0f;
-		if (down.pressed && !up.pressed) move.y =-1.0f;
-		if (!down.pressed && up.pressed) move.y = 1.0f;
-
-		//make it so that moving diagonally doesn't go faster:
-		if (move != glm::vec2(0.0f)) move = glm::normalize(move) * PlayerSpeed * elapsed;
-
-		glm::mat4x3 frame = camera->transform->make_local_to_parent();
-		glm::vec3 frame_right = frame[0];
-		//glm::vec3 up = frame[1];
-		glm::vec3 frame_forward = -frame[2];
-
-		camera->transform->position += move.x * frame_right + move.y * frame_forward;
+		if(timer == 0){
+			timer = 0.1f;
+			if (enter.pressed && !right.pressed && !left.pressed){
+				texts[0].text = script->get_next_line((selector->position.x + 0.4f)/0.7f);
+				Roboto->gen_texture(tex_example.tex, texts);
+			}
+			if (!right.pressed && left.pressed) selector->position.x = std::clamp(selector->position.x - 0.7f, -0.4f, 1.f);
+			if (right.pressed && !left.pressed) selector->position.x = std::clamp(selector->position.x + 0.7f, -0.4f, 1.f);
+		}
+		
+		timer = std::max(timer - elapsed, 0.f);
 	}
 
 	{ //update listener to camera position:
@@ -215,10 +200,9 @@ void PlayMode::update(float elapsed) {
 	}
 
 	{ //reset button press counters:
-		left.downs = 0;
+		enter.downs = 0;
 		right.downs = 0;
-		up.downs = 0;
-		down.downs = 0;
+		left.downs = 0;
 	}
 	
 	/*tex_example.CLIP_FROM_LOCAL = camera->make_projection() * glm::mat4(camera->transform->make_world_to_local()) * glm::mat4(
@@ -273,9 +257,4 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 		
 	}
 	GL_ERRORS();
-}
-
-glm::vec3 PlayMode::get_raccoon_position() {
-	//the vertex position here was read from the model in blender:
-	return raccoon->make_local_to_world() * glm::vec4(-1.26137f, -11.861f, 0.0f, 1.0f);
 }
