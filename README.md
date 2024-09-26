@@ -15,9 +15,9 @@ Screen Shot:
 How To Play:
 
 You are a Raccoon and are really excited to spend a day in the Big Apple!
-Used left and right arrow keys to switch between options. Press return to enter a choice.
+Use the left and right arrow keys to switch between options. Press return to enter a choice.
 
-Sources: I made the blender scene, the music, and the script myself. I got the Roboto font from from Google Fonts. I adapted the text drawing from a combination of Qiru Hu's Font.cpp/hpp and Jim McCann's TextureProgram.cpp/hpp.
+Sources: I made the blender scene, the music, and the script myself. I got the Roboto font from Google Fonts. I adapted the text drawing from a combination of Qiru Hu's Font.cpp/hpp and Jim McCann's TextureProgram.cpp/hpp.
 
 This game was built with [NEST](NEST.md).
 
