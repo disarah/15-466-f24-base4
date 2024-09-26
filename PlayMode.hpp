@@ -2,11 +2,26 @@
 
 #include "Scene.hpp"
 #include "Sound.hpp"
+#include "Font.hpp"
 
 #include <glm/glm.hpp>
 
 #include <vector>
 #include <deque>
+
+struct PosTexVertex {
+    glm::vec3 Position;
+    glm::vec2 TexCoord;
+};
+static_assert( sizeof(PosTexVertex) == 3*4 + 2*4, "PosTexVertex is packed." );
+struct {
+    GLuint tex = 0; //created at startup
+    GLuint vbo = 0; //vertex buffer (of PosTexVertex)
+    GLuint vao = 0; //vertex array object
+
+    GLuint count = 0; //number of vertices in buffer
+    glm::mat4 CLIP_FROM_LOCAL = glm::mat4(1.0f); //transform to use when drawing
+} tex_example;
 
 struct PlayMode : Mode {
 	PlayMode();
@@ -41,6 +56,10 @@ struct PlayMode : Mode {
 
 	//music coming from the tip of the leg (as a demonstration):
 	std::shared_ptr< Sound::PlayingSample > leg_tip_loop;
+
+	std::shared_ptr< Font > Roboto;
+
+	std::vector<Text> texts;
 	
 	//camera:
 	Scene::Camera *camera = nullptr;
