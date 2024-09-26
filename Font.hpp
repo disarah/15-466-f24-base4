@@ -1,4 +1,11 @@
-// Code adapted from Qiru Hu's Font.hpp
+/*
+    Code adapted from Qiru Hu's Font.hpp
+    References Qiru left for this code: 
+        https://github.com/harfbuzz/harfbuzz-tutorial/blob/master/hello-harfbuzz-freetype.c 
+        https://freetype.org/freetype2/docs/tutorial/step1.html
+    Additional References I also looked at:
+        https://learnopengl.com/code_viewer_gh.php?code=src/7.in_practice/2.text_rendering/text_rendering.cpp
+ */
 #pragma once
 
 #include <ft2build.h>
