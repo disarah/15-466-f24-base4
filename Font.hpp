@@ -34,7 +34,7 @@ struct Font {
     unsigned int width;
     unsigned int height;
 
-    glm::u8vec3 color = glm::u8vec3(100,100,100);
+    glm::u8vec3 color = glm::u8vec3(255);
 
     FT_Library ft_library;
     FT_Face ft_face;

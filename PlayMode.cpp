@@ -15,13 +15,13 @@
 
 GLuint hexapod_meshes_for_lit_color_texture_program = 0;
 Load< MeshBuffer > hexapod_meshes(LoadTagDefault, []() -> MeshBuffer const * {
-	MeshBuffer const *ret = new MeshBuffer(data_path("hexapod.pnct"));
+	MeshBuffer const *ret = new MeshBuffer(data_path("game4.pnct"));
 	hexapod_meshes_for_lit_color_texture_program = ret->make_vao_for_program(lit_color_texture_program->program);
 	return ret;
 });
 
 Load< Scene > hexapod_scene(LoadTagDefault, []() -> Scene const * {
-	return new Scene(data_path("hexapod.scene"), [&](Scene &scene, Scene::Transform *transform, std::string const &mesh_name){
+	return new Scene(data_path("game4.scene"), [&](Scene &scene, Scene::Transform *transform, std::string const &mesh_name){
 		Mesh const &mesh = hexapod_meshes->lookup(mesh_name);
 
 		scene.drawables.emplace_back(transform);
@@ -37,25 +37,19 @@ Load< Scene > hexapod_scene(LoadTagDefault, []() -> Scene const * {
 	});
 });
 
-Load< Sound::Sample > dusty_floor_sample(LoadTagDefault, []() -> Sound::Sample const * {
-	return new Sound::Sample(data_path("dusty-floor.opus"));
+Load< Sound::Sample > game4_music_sample(LoadTagDefault, []() -> Sound::Sample const * {
+	return new Sound::Sample(data_path("game4.opus"));
 });
 
 PlayMode::PlayMode() : scene(*hexapod_scene) {
 	//get pointers to leg for convenience:
 	{
 		for (auto &transform : scene.transforms) {
-			if (transform.name == "Hip.FL") hip = &transform;
-			else if (transform.name == "UpperLeg.FL") upper_leg = &transform;
-			else if (transform.name == "LowerLeg.FL") lower_leg = &transform;
+			if (transform.name == "Raccoon") raccoon = &transform;
 		}
-		if (hip == nullptr) throw std::runtime_error("Hip not found.");
-		if (upper_leg == nullptr) throw std::runtime_error("Upper leg not found.");
-		if (lower_leg == nullptr) throw std::runtime_error("Lower leg not found.");
+		if (raccoon == nullptr) throw std::runtime_error("Raccoon not found.");
 
-		hip_base_rotation = hip->rotation;
-		upper_leg_base_rotation = upper_leg->rotation;
-		lower_leg_base_rotation = lower_leg->rotation;
+		raccoon_rotation = raccoon->rotation;
 
 		//get pointer to camera for convenience:
 		if (scene.cameras.size() != 1) throw std::runtime_error("Expecting scene to have exactly one camera, but it has " + std::to_string(scene.cameras.size()));
@@ -63,17 +57,18 @@ PlayMode::PlayMode() : scene(*hexapod_scene) {
 
 		//start music loop playing:
 		// (note: position will be over-ridden in update())
-		leg_tip_loop = Sound::loop_3D(*dusty_floor_sample, 1.0f, get_leg_tip_position(), 10.0f);
+		music_loop = Sound::loop_3D(*game4_music_sample, 1.0f, get_raccoon_position(), 10.0f);
 	}
+
 	Text text1;
-	text1.text = "wowwkekjlwkjflkjwlkf";
+	text1.text = "wowwkekjlwkjflkjwlkf                                           sldkfjlskdjfs                                              sldkfjsl";
     text1.start_pos = glm::vec2();
-	text1.line_length = 100;
-	text1.line_height = 100;
+	text1.line_length = 50;
+	text1.line_height = 80;
 
 	texts.push_back(text1);
 
-	Roboto = std::make_shared<Font> (data_path("Roboto/Roboto-Regular.ttf"), 72, 1280, 720);
+	Roboto = std::make_shared<Font> (data_path("Roboto/Roboto-Regular.ttf"), 72, 1000, 500);
 	Roboto->gen_texture(tex_example.tex, texts);
 
 	{ //set up vertex array and buffers:
@@ -93,6 +88,42 @@ PlayMode::PlayMode() : scene(*hexapod_scene) {
 		glBindVertexArray(0);
 	}
 	GL_ERRORS();
+
+	{ //---------- texture example generate some vertices ----------
+		std::vector< PosTexVertex > verts;
+
+		verts.emplace_back(PosTexVertex{
+			.Position = glm::vec3(0.0f, 0.0f, 0.0f),
+			.TexCoord = glm::vec2(0.0f, 0.0f),
+		});
+		verts.emplace_back(PosTexVertex{
+			.Position = glm::vec3(0.0f, 1.0f, 0.0f),
+			.TexCoord = glm::vec2(0.0f, 1.0f),
+		});
+		verts.emplace_back(PosTexVertex{
+			.Position = glm::vec3(1.0f, 0.0f, 0.0f),
+			.TexCoord = glm::vec2(1.0f, 0.0f),
+		});
+		verts.emplace_back(PosTexVertex{
+			.Position = glm::vec3(1.0f, 1.0f, 0.0f),
+			.TexCoord = glm::vec2(1.0f, 1.0f),
+		});
+
+		glBindBuffer(GL_ARRAY_BUFFER, tex_example.vbo);
+		glBufferData(GL_ARRAY_BUFFER, verts.size() * sizeof(verts[0]), verts.data(), GL_STREAM_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		tex_example.count = verts.size();
+
+		GL_ERRORS();
+
+		//identity transform (just drawing "on the screen"):
+		tex_example.CLIP_FROM_LOCAL = glm::mat4(
+			1.0f, 0.0f, 0.0f, 0.0f,
+			0.0f, 1.0f, 0.0f, 0.0f,
+			0.0f, 0.0f, 1.0f, 0.0f,
+			0.0f, 0.0f, 0.0f, 1.0f
+		);
+	}
 }
 
 PlayMode::~PlayMode() {
@@ -147,21 +178,13 @@ void PlayMode::update(float elapsed) {
 		wobble += elapsed / 10.0f;
 		wobble -= std::floor(wobble);
 
-		hip->rotation = hip_base_rotation * glm::angleAxis(
+		raccoon->rotation = raccoon_rotation * glm::angleAxis(
 			glm::radians(5.0f * std::sin(wobble * 2.0f * float(M_PI))),
 			glm::vec3(0.0f, 1.0f, 0.0f)
 		);
-		upper_leg->rotation = upper_leg_base_rotation * glm::angleAxis(
-			glm::radians(7.0f * std::sin(wobble * 2.0f * 2.0f * float(M_PI))),
-			glm::vec3(0.0f, 0.0f, 1.0f)
-		);
-		lower_leg->rotation = lower_leg_base_rotation * glm::angleAxis(
-			glm::radians(10.0f * std::sin(wobble * 3.0f * 2.0f * float(M_PI))),
-			glm::vec3(0.0f, 0.0f, 1.0f)
-		);
 
 		//move sound to follow leg tip position:
-		leg_tip_loop->set_position(get_leg_tip_position(), 1.0f / 60.0f);
+		music_loop->set_position(get_raccoon_position(), 1.0f / 60.0f);
 	}
 	//move camera:
 	{
@@ -197,44 +220,13 @@ void PlayMode::update(float elapsed) {
 		up.downs = 0;
 		down.downs = 0;
 	}
-	/*
-	tex_example.CLIP_FROM_LOCAL = camera->make_projection() * glm::mat4(camera->transform->make_world_to_local()) * glm::mat4(
-		5.0f, 0.0f, 0.0f, 0.0f,
-		0.0f, 5.0f, 0.0f, 0.0f,
-		0.0f, 0.0f, 5.0f, 0.0f,
-		0.0f, 0.0f, 20.0f, 1.0f
+	
+	/*tex_example.CLIP_FROM_LOCAL = camera->make_projection() * glm::mat4(camera->transform->make_world_to_local()) * glm::mat4(
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
 	);*/
-	{ //---------- texture example generate some vertices ----------
-		std::vector< PosTexVertex > verts;
-
-		verts.emplace_back(PosTexVertex{
-			.Position = glm::vec3(0.0f, 0.0f, 0.0f),
-			.TexCoord = glm::vec2(0.0f, 0.0f),
-		});
-		verts.emplace_back(PosTexVertex{
-			.Position = glm::vec3(0.0f, 1.0f, 0.0f),
-			.TexCoord = glm::vec2(0.0f, 1.0f),
-		});
-		verts.emplace_back(PosTexVertex{
-			.Position = glm::vec3(1.0f, 0.0f, 0.0f),
-			.TexCoord = glm::vec2(1.0f, 0.0f),
-		});
-		verts.emplace_back(PosTexVertex{
-			.Position = glm::vec3(1.0f, 1.0f, 0.0f),
-			.TexCoord = glm::vec2(1.0f, 1.0f),
-		});
-
-		glBindTexture(GL_ARRAY_BUFFER, tex_example.tex);
-		glBindBuffer(GL_ARRAY_BUFFER, tex_example.vbo);
-		glBufferData(GL_ARRAY_BUFFER, verts.size() * sizeof(verts[0]), verts.data(), GL_STREAM_DRAW);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		tex_example.count = verts.size();
-
-		GL_ERRORS();
-
-		//identity transform (just drawing "on the screen"):
-		tex_example.CLIP_FROM_LOCAL = glm::mat4(1.0f);
-	}
 }
 
 void PlayMode::draw(glm::uvec2 const &drawable_size) {
@@ -305,7 +297,7 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
 	GL_ERRORS();
 }
 
-glm::vec3 PlayMode::get_leg_tip_position() {
+glm::vec3 PlayMode::get_raccoon_position() {
 	//the vertex position here was read from the model in blender:
-	return lower_leg->make_local_to_world() * glm::vec4(-1.26137f, -11.861f, 0.0f, 1.0f);
+	return raccoon->make_local_to_world() * glm::vec4(-1.26137f, -11.861f, 0.0f, 1.0f);
 }

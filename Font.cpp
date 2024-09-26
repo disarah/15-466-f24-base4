@@ -1,5 +1,6 @@
 // Code made by Qiru Hu
 // Reference: https://github.com/harfbuzz/harfbuzz-tutorial/blob/master/hello-harfbuzz-freetype.c and https://freetype.org/freetype2/docs/tutorial/step1.html
+// https://learnopengl.com/code_viewer_gh.php?code=src/7.in_practice/2.text_rendering/text_rendering.cpp
 #include "Font.hpp"
 #include "gl_errors.hpp"
 
