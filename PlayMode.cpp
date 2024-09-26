@@ -96,19 +96,19 @@ PlayMode::PlayMode() : scene(*hexapod_scene) {
 		std::vector< PosTexVertex > verts;
 
 		verts.emplace_back(PosTexVertex{
-			.Position = glm::vec3(-0.5f, -1.0f, 0.0f),
+			.Position = glm::vec3(-0.5f, -0.8f, 0.0f),
 			.TexCoord = glm::vec2(0.0f, 0.0f),
 		});
 		verts.emplace_back(PosTexVertex{
-			.Position = glm::vec3(-0.5f, 0.5f, 0.0f),
+			.Position = glm::vec3(-0.5f, 0.7f, 0.0f),
 			.TexCoord = glm::vec2(0.0f, 1.0f),
 		});
 		verts.emplace_back(PosTexVertex{
-			.Position = glm::vec3(1.5f, -1.0f, 0.0f),
+			.Position = glm::vec3(1.5f, -0.8f, 0.0f),
 			.TexCoord = glm::vec2(1.0f, 0.0f),
 		});
 		verts.emplace_back(PosTexVertex{
-			.Position = glm::vec3(1.5f, 0.5f, 0.0f),
+			.Position = glm::vec3(1.5f, 0.7f, 0.0f),
 			.TexCoord = glm::vec2(1.0f, 1.0f),
 		});
 

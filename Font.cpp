@@ -198,6 +198,7 @@ std::vector<std::string> Font::wrapText(const std::string& text, size_t line_len
         if (spacePos != std::string::npos && spacePos > start) {
             lines.push_back(text.substr(start, spacePos - start));
             start = spacePos + 1; // Move to the next word
+            
         } else {
             // If no space is found, break at the line length (potential word split)
             lines.push_back(text.substr(start, line_length));

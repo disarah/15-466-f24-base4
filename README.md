@@ -2,11 +2,13 @@
 
 Author: Sarah Di (sarahdi)
 
-Design: (TODO: In two sentences or fewer, describe what is new and interesting about your game.)
+Design: My game is about a raccoon spending a day in New York.
 
-Text Drawing: (TODO: how does the text drawing in this game work? Is text precomputed? Rendered at runtime? What files or utilities are involved?)
+Text Drawing: The in game text is defined in Script.cpp and rendered at runtime. (TODO: how does the text drawing in this game work? Is text precomputed? Rendered at runtime? What files or utilities are involved?)
 
 Choices: (TODO: how does the game store choices and narrative? How are they authored? Anything nifty you want to point out?)
+
+I also composed a small 15 bar song that plays in the background.
 
 Screen Shot:
 
