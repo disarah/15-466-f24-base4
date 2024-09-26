@@ -1,3 +1,9 @@
+/**
+ * Sections of texture rendering taken from Jim McCann's notes
+ * With additional clarification help from Sasha's notes "Texture Rendering in OpenGL" on Jim's notes
+ * Both of these were obtained via the class Discord
+ */
+
 #include "PlayMode.hpp"
 
 #include "LitColorTextureProgram.hpp"

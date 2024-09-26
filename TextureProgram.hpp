@@ -1,5 +1,7 @@
-// Taken from Class Discord
-// Jim McCann
+/**
+ * Texture Program.hpp from Jim McCann's notes 
+ * Obtained through the class Discord
+ */
 #pragma once
 
 #include "GL.hpp"
