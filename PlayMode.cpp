@@ -182,7 +182,7 @@ void PlayMode::update(float elapsed) {
 		if(timer == 0){
 			timer = 0.1f;
 			if (enter.pressed && !right.pressed && !left.pressed){
-				texts[0].text = script->get_next_line((selector->position.x + 0.4f)/0.7f);
+				texts[0].text = script->get_next_line((uint32_t)std::round((selector->position.x + 0.4f)/0.7f));
 				Roboto->gen_texture(tex_example.tex, texts);
 			}
 			if (!right.pressed && left.pressed) selector->position.x = std::clamp(selector->position.x - 0.7f, -0.4f, 1.f);
