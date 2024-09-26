@@ -4,11 +4,11 @@ Author: Sarah Di (sarahdi)
 
 Design: My game is about a raccoon spending a day in New York.
 
-Text Drawing: The in game text is defined in Script.cpp and rendered at runtime. (TODO: how does the text drawing in this game work? Is text precomputed? Rendered at runtime? What files or utilities are involved?)
+Text Drawing: The text for this game is precomputed and rendered at runtime using code adapted from Qiru Hu's Font.cpp/hpp (with permission!). Using both the TextureProgram script by Jim McCann which we covered in class, I then render the texture in the blender scene as fixed to the screen.
 
-Choices: (TODO: how does the game store choices and narrative? How are they authored? Anything nifty you want to point out?)
+(TODO: how does the text drawing in this game work? What files or utilities are involved?)
 
-I also composed a small 15 bar song that plays in the background.
+Choices: The game stores choices in Story.cpp/hpp. Since there are only three endings and no additional variables/inventory, I just hardcoded all the possible body text responses using a struct of string vectors.
 
 Screen Shot:
 
@@ -16,10 +16,10 @@ Screen Shot:
 
 How To Play:
 
-You are a Raccoon that likes shiny things. 
-(TODO: describe the controls and (if needed) goals/strategy.)
+You are a Raccoon and are really excited to spend a day in the Big Apple!
+Used left and right arrow keys to switch between options. Press return to enter a choice.
 
-Sources: (TODO: list a source URL for any assets you did not create yourself. Make sure you have a license for the asset.)
+Sources: I made the blender scene, the music, and the script myself. I got the Roboto font from from Google Fonts. I adapted the text drawing from a combination of Qiru Hu's Font.cpp/hpp and Jim McCann's TextureProgram.cpp/hpp.
 
 This game was built with [NEST](NEST.md).
 
