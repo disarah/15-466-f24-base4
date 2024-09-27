@@ -60,7 +60,7 @@ Script::~Script() {
 
 std::string Script::get_next_line(u_int32_t action){
     std::string bodyText;
-    if (timeOfDay == 3){
+    if (timeOfDay == 0){
         bodyText = "You take an overnight greyhound bus and now you're in the Big Apple. Carpe Diem!";
     } else if(action == 0){
         bodyText = places.timesSquare[places.visits[action]];
@@ -74,6 +74,7 @@ std::string Script::get_next_line(u_int32_t action){
     }
 
     timeOfDay +=3;
+    
     if(timeOfDay >= 24){
         timeOfDay = 0;
         unsigned int max = std::distance(places.visits.begin(), std::max_element(places.visits.begin(), places.visits.end()));
